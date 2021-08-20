@@ -1,14 +1,16 @@
 import Joi from 'joi';
 import bcrypt from 'bcrypt'; 
-import { User } from '../../models';
+import { RefreshToken, User } from '../../models';
 import { CustomErrorHandler } from '../../services/CustomErrorHandler';
 import { JWTService } from '../../services/JWTService';
+import { REFRESH_SECRET } from '../../config';
 
 
 const loginController = {
 
     async login(req, res, next) {
 
+        // Validation
         const loginSchema = Joi.object({
             contact: Joi.string().length(10).required(),
             password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{8,30}$')).required()
@@ -35,16 +37,48 @@ const loginController = {
                 return next(CustomErrorHandler.wrongCredentials());
             }
 
-            // Create Token
+            // Create Tokens
             const access_token = JWTService.sign({ _id: user._id });
+            const refresh_token = JWTService.sign({ _id: user._id }, '1y', REFRESH_SECRET);
 
-            res.json({ access_token });
+            // whitelist refresh token in database
+            await RefreshToken.create({ token: refresh_token });
+
+            res.json({ access_token, refresh_token });
 
 
         } catch(err) {
             return next(err);
         }
 
+    },
+
+    async logout(req, res, next){
+
+        // Validation
+        const refreshSchema = Joi.object({
+            refresh_token: Joi.string().required(),
+        });
+
+
+        const { error } = refreshSchema.validate(req.body);
+
+        if(error) {
+            return next(error);
+        }
+
+        // Delete refresh token from database
+        try {
+
+            await RefreshToken.deleteOne({ token: req.body.refresh_token});
+
+        } catch(err) {
+            return next(err);
+        }
+
+        return res.status(200).json({
+            message: 'Logged out successfully'
+        });
     }
 
 }

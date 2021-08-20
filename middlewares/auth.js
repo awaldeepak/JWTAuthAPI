@@ -4,7 +4,6 @@ import { JWTService } from "../services/JWTService";
 const auth = async (req, res, next) => {
 
     let authHeader = req.headers.authorization;
-    console.log(authHeader);
 
     if(!authHeader){
         return next(CustomErrorHandler.unAuthorized());

@@ -12,7 +12,7 @@ const userController = {
             const signed_in_user = await User.findOne({_id: req.user._id});
             //If logged in user is invalid
             if(!signed_in_user) {
-                return next(CustomErrorHandler.unAuthorized());
+                return next(CustomErrorHandler.unAuthorized('Invalid logged in user'));
             }
 
             //Get the requested user details from DB

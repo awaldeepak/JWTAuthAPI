@@ -1,8 +1,9 @@
 import Joi from "joi";
-import { User } from '../../models';
+import { RefreshToken, User } from '../../models';
 import { CustomErrorHandler } from '../../services/CustomErrorHandler';
 import bcrypt from 'bcrypt';
 import { JWTService } from '../../services/JWTService';
+import { REFRESH_SECRET } from "../../config";
 
 
 const registerController = {
@@ -11,13 +12,13 @@ const registerController = {
 
 
         // CHECKLIST
-        // [ ] validate the request
-        // [ ] authorise the request
-        // [ ] check if user is in the database already
-        // [ ] prepare model
-        // [ ] store in database
-        // [ ] generate jwt token
-        // [ ] send response
+        // validate the request
+        // authorise the request
+        // check if user is in the database already
+        // prepare model
+        // store in database
+        // generate jwt token
+        // send response
 
         const registerSchema = Joi.object({
             name: Joi.string().min(3).max(30).required(),
@@ -61,15 +62,18 @@ const registerController = {
         });
 
         let access_token;
+        let refresh_token;
 
         try {
 
             const result = await user.save();
-            console.log(result);
 
-            // Create Token
+            // Create Tokens
             access_token = JWTService.sign({ _id: result._id });
+            refresh_token = JWTService.sign({ _id: result._id }, '1y', REFRESH_SECRET);
 
+            // whitelist refresh token in database
+            await RefreshToken.create({ token: refresh_token });
 
 
         } catch(err) {
@@ -77,9 +81,9 @@ const registerController = {
 
         }
 
-
         return res.json({
-            access_token: access_token
+            access_token,
+            refresh_token
         });
     }
 }
