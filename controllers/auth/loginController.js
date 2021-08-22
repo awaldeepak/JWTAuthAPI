@@ -4,6 +4,7 @@ import { RefreshToken, User } from '../../models';
 import { CustomErrorHandler } from '../../services/CustomErrorHandler';
 import { JWTService } from '../../services/JWTService';
 import { REFRESH_SECRET } from '../../config';
+import sanitize from 'mongo-sanitize';
 
 
 const loginController = {
@@ -24,7 +25,7 @@ const loginController = {
         }
 
         try {
-            const user = await User.findOne({ contact: req.body.contact });
+            const user = await User.findOne({ contact: sanitize(req.body.contact) });
 
             //If User not exists
             if(!user) {
@@ -32,7 +33,7 @@ const loginController = {
             }
 
             // Compare Password
-            const match = await bcrypt.compare(req.body.password, user.password);
+            const match = await bcrypt.compare(sanitize(req.body.password), user.password);
             if(!match){
                 return next(CustomErrorHandler.wrongCredentials());
             }

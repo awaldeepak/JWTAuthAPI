@@ -1,5 +1,6 @@
 import { User } from '../../models';
 import { CustomErrorHandler } from '../../services/CustomErrorHandler';
+import sanitize from 'mongo-sanitize';
 
 
 const userController = {
@@ -16,7 +17,7 @@ const userController = {
             }
 
             //Get the requested user details from DB
-            const user = await User.findOne({contact: req.params.contact}).select('-_id -password -updatedAt -__v');
+            const user = await User.findOne({contact: sanitize(req.params.contact)}).select('-_id -password -updatedAt -__v');
             
             //If user is not found
             if(!user) {

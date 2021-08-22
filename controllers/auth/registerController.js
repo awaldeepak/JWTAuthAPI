@@ -4,6 +4,7 @@ import { CustomErrorHandler } from '../../services/CustomErrorHandler';
 import bcrypt from 'bcrypt';
 import { JWTService } from '../../services/JWTService';
 import { REFRESH_SECRET } from "../../config";
+import sanitize from 'mongo-sanitize';
 
 
 const registerController = {
@@ -38,7 +39,7 @@ const registerController = {
 
         //Check if user is already exists
         try {
-            const exist = await User.exists({ contact: req.body.contact });
+            const exist = await User.exists({ contact: sanitize(req.body.contact) });
             if(exist) {
                 return next(CustomErrorHandler.alreadyExist());
             }
