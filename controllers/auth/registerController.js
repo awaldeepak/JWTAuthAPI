@@ -82,6 +82,7 @@ const registerController = {
         }
 
         return res.json({
+            message: 'Registration is successfully',
             access_token,
             refresh_token
         });

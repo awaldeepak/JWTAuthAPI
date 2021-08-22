@@ -44,7 +44,11 @@ const loginController = {
             // whitelist refresh token in database
             await RefreshToken.create({ token: refresh_token });
 
-            res.json({ access_token, refresh_token });
+            res.json({ 
+                message: 'Logged in successfully',
+                access_token, 
+                refresh_token 
+            });
 
 
         } catch(err) {

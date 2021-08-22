@@ -50,7 +50,10 @@ const refreshController = {
             // whitelist refresh token in database
             await RefreshToken.create({ token: refresh_token });
 
-            res.json({ access_token, refresh_token });
+            res.json({ 
+                message: 'Refresh token generated successfully',
+                access_token, 
+                refresh_token });
 
 
         } catch(err) {
