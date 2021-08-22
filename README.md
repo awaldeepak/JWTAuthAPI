@@ -30,7 +30,7 @@ Start the server using command:
 ```
 ## Running Tests on POSTMAN
 * API 1 - Register a user
-URL – http://localhost:3000/api/register
+URL – http://localhost:3000/api/register or https://lit-mountain-96782.herokuapp.com/api/register
 
 Method - POST
 
@@ -42,7 +42,7 @@ test_images/Register.PNG
 
 
 * API 2 - Login user
-URL – http://localhost:3000/api/login
+URL – http://localhost:3000/api/login or https://lit-mountain-96782.herokuapp.com/api/login
 
 Method - POST
 
@@ -54,7 +54,7 @@ test_images/Login.PNG
 
 
 * API 3 - Refresh token
-URL – http://localhost:3000/api/refresh
+URL – http://localhost:3000/api/refresh or https://lit-mountain-96782.herokuapp.com/api/refresh
 
 Method - POST
 
@@ -66,7 +66,7 @@ test_images/Generate refresh token.PNG
 
 
 * API 4 - Get user details
-URL – http://localhost:3000/api/users/<registered_user_contact>
+URL – http://localhost:3000/api/users/<registered_user_contact> or https://lit-mountain-96782.herokuapp.com/api/users/<registered_user_contact>
 
 Method - GET
 
@@ -78,7 +78,7 @@ test_images/User details.PNG
 
 
 * API 5 - Logout user
-URL – http://localhost:3000/api/logout
+URL – http://localhost:3000/api/logout or https://lit-mountain-96782.herokuapp.com/api/logout
 
 Method - POST
 
